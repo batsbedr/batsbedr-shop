@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BATS BEDR | THE ROYAL RETURN</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Tajawal:wght@400;700&display=swap');
+        :root { --gold: #ffcf40; --purple: #a020f0; --dark: #000; }
+
+        body {
+            margin: 0; background: var(--dark); color: white;
+            font-family: 'Tajawal', sans-serif; overflow-x: hidden;
+            background: radial-gradient(circle at center, #1a0033 0%, #000 100%);
+            min-height: 100vh;
+        }
+
+        /* --- شريط العروض (التصميم الملكي) --- */
+        #offers-marquee {
+            background: rgba(160, 32, 240, 0.2); border-bottom: 1px solid var(--gold);
+            padding: 12px 0; overflow: hidden; white-space: nowrap; display: none;
+            position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);
+        }
+        .marquee-content { display: inline-block; animation: marquee 20s linear infinite; }
+        .offer-item { display: inline-flex; align-items: center; margin: 0 50px; color: var(--gold); font-weight: bold; font-size: 18px; }
+
+        /* --- الهيدر واللوحة --- */
+        header { padding: 40px; text-align: center; }
+        h1 { font-family: 'Cinzel', serif; font-size: 60px; margin: 0; background: linear-gradient(to bottom, var(--gold), #fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; filter: drop-shadow(0 0 15px var(--purple)); }
+
+        #king-panel { 
+            background: rgba(10, 10, 10, 0.98); border: 2px solid var(--gold); 
+            margin: 20px auto; padding: 25px; border-radius: 30px; 
+            display: none; box-shadow: 0 0 40px var(--purple); 
+            max-width: 800px; position: relative; z-index: 1001; 
+        }
+        .admin-tabs { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; }
+        .tab-btn { flex: 1; padding: 12px; background: #222; color: var(--gold); border: 1px solid var(--gold); border-radius: 12px; cursor: pointer; white-space: nowrap; transition: 0.3s; }
+        .tab-btn.active { background: var(--gold); color: black; font-weight: bold; }
+
+        /* --- الخاروف والمناسبة --- */
+        #sheep-btn { position: fixed; bottom: 30px; right: 30px; width: 100px; cursor: pointer; z-index: 1000; filter: drop-shadow(0 0 15px white); transition: 0.4s; display: none; }
+        #sheep-btn:hover { transform: scale(1.1) rotate(10deg); }
+        
+        #event-overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.95); z-index: 2000; display: none; 
+            flex-direction: column; align-items: center; justify-content: center; 
+        }
+        .sheep-big { width: 250px; animation: bounce 2s infinite; }
+        .event-msg-btn { 
+            background: var(--gold); color: black; padding: 20px 50px; 
+            border-radius: 60px; font-size: 28px; font-weight: bold; 
+            border: 4px solid white; cursor: pointer; margin-top: 25px; 
+            box-shadow: 0 0 30px var(--gold); 
+        }
+
+        /* --- المتجر (الشبكة السحرية) --- */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 35px; padding: 50px; }
+        .magic-card { 
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); 
+            border-radius: 30px; padding: 25px; border: 1px solid rgba(255,255,255,0.1); 
+            transition: 0.5s; text-align: center; position: relative;
+        }
+        .magic-card:hover { transform: translateY(-10px); border-color: var(--gold); box-shadow: 0 0 30px rgba(160, 32, 240, 0.3); }
+        .magic-card img { width: 100%; border-radius: 20px; height: 220px; object-fit: cover; margin-bottom: 15px; }
+        .btn-gold { background: var(--gold); color: black; border: none; padding: 15px; border-radius: 15px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; transition: 0.3s; }
+        .btn-gold:hover { transform: scale(1.05); background: #fff; }
+
+        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-30px); } }
+    </style>
+</head>
+<body>
+
+<div id="offers-marquee"><div class="marquee-content" id="marquee-list"></div></div>
+
+<header>
+    <h1 id="king-title">BatsBedr</h1>
+    <p style="color: var(--gold); letter-spacing: 3px;">مملكة الملك أحمد السحابية 👑</p>
+</header>
+
+<div id="king-panel">
+    <div class="admin-tabs">
+        <button class="tab-btn active" id="tab-add">المنتجات</button>
+        <button class="tab-btn" id="tab-offers">شريط العروض</button>
+        <button class="tab-btn" id="tab-event">المناسبة</button>
+        <button class="tab-btn" id="tab-inbox">الطلبات</button>
+    </div>
+
+    <div id="view-add">
+        <input type="text" id="pName" placeholder="اسم الغرض" style="width:45%; padding:12px; margin:5px; border-radius:10px;">
+        <input type="number" id="pPrice" placeholder="السعر" style="width:45%; padding:12px; margin:5px; border-radius:10px;">
+        <input type="file" id="pFile" style="margin:15px;">
+        <button class="btn-gold" id="btn-save">تثبيت في المتجر ✨</button>
+    </div>
+
+    <div id="view-offers" style="display:none;">
+        <input type="text" id="offerInput" placeholder="اكتب عرضاً جديداً هنا..." style="width:85%; padding:12px; margin-bottom:15px;">
+        <button class="btn-gold" id="btn-offer">تفعيل العرض في الشريط ⚡</button>
+        <button class="btn-gold" id="btn-clear-offers" style="background:red; color:white; margin-top:10px;">حذف كل العروض</button>
+    </div>
+
+    <div id="view-event" style="display:none;">
+        <input type="text" id="eventInput" placeholder="رسالة الخاروف (مثلاً: عيدكم مبارك)" style="width:85%; padding:12px; margin-bottom:15px;">
+        <button class="btn-gold" id="btn-save-event">تحديث رسالة الخاروف 🐑</button>
+        <button class="btn-gold" id="btn-toggle-sheep" style="margin-top:10px;">تشغيل/إيقاف ظهور الخاروف</button>
+    </div>
+
+    <div id="view-inbox" style="display:none; text-align:right;"></div>
+</div>
+
+<div class="grid" id="main-grid"></div>
+
+<div id="sheep-btn"><img src="https://cdn-icons-png.flaticon.com/512/2523/2523719.png" width="100%"></div>
+
+<div id="event-overlay" onclick="this.style.display='none'">
+    <img src="https://cdn-icons-png.flaticon.com/512/2523/2523719.png" class="sheep-big">
+    <button id="displayMsg" class="event-msg-btn">مبارك عليكم العيد</button>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+    import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyD_mUThaQQzze1s07D0HmiUzbkGn_u-Q5E",
+        authDomain: "ahmed-shop-dc9a3.firebaseapp.com",
+        databaseURL: "https://ahmed-shop-dc9a3-default-rtdb.firebaseio.com",
+        projectId: "ahmed-shop-dc9a3",
+        storageBucket: "ahmed-shop-dc9a3.firebasestorage.app",
+        messagingSenderId: "507439316859",
+        appId: "1:507439316859:web:c9fa5031ffac08117d07de"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    let imgBase64 = "";
+    let sheepStatus = true;
+
+    // --- ربط الأزرار واللوحة ---
+    document.getElementById('king-title').onclick = () => {
+        if(prompt("رمز الملك أحمد:") === "احمد") document.getElementById('king-panel').style.display='block';
+    };
+
+    const tabLinks = {'tab-add': 'view-add', 'tab-offers': 'view-offers', 'tab-event': 'view-event', 'tab-inbox': 'view-inbox'};
+    Object.keys(tabLinks).forEach(id => {
+        document.getElementById(id).onclick = () => {
+            Object.values(tabLinks).forEach(v => document.getElementById(v).style.display = 'none');
+            document.getElementById(tabLinks[id]).style.display = 'block';
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        };
+    });
+
+    // --- عمليات المتجر ---
+    document.getElementById('pFile').onchange = (e) => {
+        const reader = new FileReader();
+        reader.onload = (ev) => imgBase64 = ev.target.result;
+        reader.readAsDataURL(e.target.files[0]);
+    };
+
+    document.getElementById('btn-save').onclick = () => {
+        const n = document.getElementById('pName').value, p = document.getElementById('pPrice').value;
+        if(n && p && imgBase64) {
+            push(ref(db, 'products'), {n, p, i: imgBase64}).then(() => alert("تم التثبيت في المتجر الملكي!"));
+        } else { alert("يا ملك، ارفع الصورة واكتب البيانات كاملة!"); }
+    };
+
+    onValue(ref(db, 'products'), (snapshot) => {
+        const grid = document.getElementById('main-grid'); grid.innerHTML = '';
+        const data = snapshot.val();
+        if(data) Object.keys(data).forEach(key => {
+            const item = data[key];
+            const card = document.createElement('div'); card.className = 'magic-card';
+            card.innerHTML = `<img src="${item.i}"><h3>${item.n}</h3><p style="color:var(--gold); font-size:20px;">${item.p} ريال</p><button class="btn-gold order-btn">طلب 🦅</button><button class="del-item" style="color:red; background:none; border:none; cursor:pointer; margin-top:10px; display:${document.getElementById('king-panel').style.display==='block'?'block':'none'}">حذف</button>`;
+            card.querySelector('.order-btn').onclick = () => {
+                const name = prompt("اسمك الكريم لتسجيل الطلب:");
+                if(name) push(ref(db, 'orders'), {uName: name, pName: item.n, time: new Date().toLocaleTimeString()});
+            };
+            card.querySelector('.del-item').onclick = () => { if(confirm("حذف الغرض؟")) remove(ref(db, `products/${key}`)); };
+            grid.appendChild(card);
+        });
+    });
+
+    // --- العروض ---
+    document.getElementById('btn-offer').onclick = () => {
+        const t = document.getElementById('offerInput').value;
+        if(t) push(ref(db, 'offers'), {t});
+    };
+    document.getElementById('btn-clear-offers').onclick = () => remove(ref(db, 'offers'));
+
+    onValue(ref(db, 'offers'), (s) => {
+        const m = document.getElementById('offers-marquee'), list = document.getElementById('marquee-list');
+        const data = s.val();
+        if(data) {
+            m.style.display = 'block';
+            list.innerHTML = Object.values(data).map(o => `<span class="offer-item">⚡ ${o.t} ⚡</span>`).join('');
+        } else { m.style.display = 'none'; }
+    });
+
+    // --- الخاروف والمناسبة ---
+    document.getElementById('sheep-btn').onclick = () => document.getElementById('event-overlay').style.display='flex';
+    document.getElementById('btn-save-event').onclick = () => {
+        update(ref(db, 'settings'), {msg: document.getElementById('eventInput').value});
+    };
+    document.getElementById('btn-toggle-sheep').onclick = () => update(ref(db, 'settings'), {show: !sheepStatus});
+
+    onValue(ref(db, 'settings'), (s) => {
+        const data = s.val();
+        if(data) {
+            document.getElementById('displayMsg').innerText = data.msg || "مبارك العيد";
+            sheepStatus = data.show;
+            document.getElementById('sheep-btn').style.display = sheepStatus ? 'block' : 'none';
+        }
+    });
+
+    // --- الطلبات ---
+    onValue(ref(db, 'orders'), (s) => {
+        const data = s.val();
+        if(data) document.getElementById('view-inbox').innerHTML = Object.values(data).map(o => `<div style="padding:15px; border-bottom:1px solid #333;">👤 <b>${o.uName}</b> طلب 📦 <b>${o.pName}</b> <br><small>${o.time}</small></div>`).reverse().join('');
+    });
+</script>
+</body>
+</html>
